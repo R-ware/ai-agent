@@ -4,6 +4,7 @@ import argparse
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+from gemini_client import GeminiClient
 
 def generate_content(client, messages, verbose):
     response = client.models.generate_content(
@@ -32,14 +33,14 @@ def main():
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY environment variable not set.")
     
-    client = genai.Client(api_key=api_key)
+    gemini_service = GeminiClient(api_key=api_key)
     messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
     verbose = args.verbose
 
     if verbose:
-        print(f"User prompt: {verbose}\\n")
+        print(f"User prompt: {args.user_prompt}")
 
-    generate_content(client, messages, verbose)
+    generate_content(gemini_service._client, messages, verbose)
 
 
 if __name__ == "__main__":
