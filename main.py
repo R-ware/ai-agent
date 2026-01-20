@@ -5,11 +5,13 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from gemini_client import GeminiClient
+from prompts import system_prompt
 
 def generate_content(client, messages, verbose):
     response = client.models.generate_content(
         model='gemini-2.5-flash',
         contents=messages,
+        config=types.GenerateContentConfig(system_instruction=system_prompt),
     )
     if not response.usage_metadata:
         raise RuntimeError("Gemini API response missing usage_metadata; request may have failed.")
